@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello HomeController!{% endblock %}
+
+{% block body %}
+    <h1>Photo</h1>
+    <div id="popup"></div>
+    <section class="row">
+        {% for photo in photos %}
+            <article class="col-4">
+                    <a href="{{ path('app_display_photo', {'slug': photo.slug}) }}">
+                        <img src="{{ photo.url }}" class="img-fluid" alt="{{ photo.title }}">
+                    </a>
+                    <figcaption>{{ photo.title }}</figcaption>
+                     <form action="{{ path('add_to_cart', {"id": photo.id}) }}" method="POST">
+                        <input type="hidden" name="qty" value="1">
+                        <input type="hidden" name="id" value="{{photo.id}}">
+                        <button type="submit" class="btn btn-primary"><i class = "icon-shopping-cart"></i>Ajouter au panier</button>
+                    </form>
+            </article>
+        {% endfor %}
+    </section>
+{% endblock %}

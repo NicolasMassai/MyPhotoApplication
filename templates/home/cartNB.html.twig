@@ -1,0 +1,31 @@
+<turbo-stream action="update" target="cart">
+    <template>
+         <a class="nav-link" href='#'>
+          <i class ="icon-shopping-cart"></i>
+            <span class=" translate-middle badge rounded-pill bg-success">
+              {% if cartNumber is defined %}
+                {{cartNumber}}
+              {% else %}
+                0
+              {% endif %}
+            </span>
+        </a>
+    </template>
+</turbo-stream>
+
+<turbo-stream action="update" target="popup">
+    <template>
+        <div class="position-absolute p-4 top-0 end-0 mt-5 translate-middle-y">
+            <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true" >
+              <div class="toast-header">
+                <strong class="me-auto">Bootstrap</strong>
+                <small>A l'instant</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+                <div class="toast-body" >
+                    Un produit a été ajouté au panier !
+                </div>
+            </div>
+        </div>
+    </template>
+</turbo-stream>
