@@ -46,6 +46,9 @@ class Photo
     #[ORM\Column(length: 255, unique: true)]
     private ?string $slug = null;
 
+    #[ORM\OneToOne(mappedBy: 'photo', cascade: ['persist', 'remove'])]
+    private ?OrderItem $orderItem = null;
+
     public function __construct()
     {
         $this->tags = new ArrayCollection();
@@ -175,6 +178,28 @@ class Photo
     public function setSlug(string $slug): static
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function getOrderItem(): ?OrderItem
+    {
+        return $this->orderItem;
+    }
+
+    public function setOrderItem(?OrderItem $orderItem): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($orderItem === null && $this->orderItem !== null) {
+            $this->orderItem->setPhoto(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($orderItem !== null && $orderItem->getPhoto() !== $this) {
+            $orderItem->setPhoto($this);
+        }
+
+        $this->orderItem = $orderItem;
 
         return $this;
     }
