@@ -3,24 +3,33 @@
 namespace App\Form;
 
 use App\Entity\User;
+use App\Entity\Customer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Validator\Constraints\IsTrue;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\ChoiceList\ChoiceList;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 
-
-class RegistrationFormType extends AbstractType
+class UserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('email')
+            ->add('roles', ChoiceType::class,[
+            'choices'=>[
+                'Client'=> 'ROLE_CUSTOMER',
+                'Admin' => 'ROLE_ADMIN',
+            ],
+            'expanded' => true,
+            'multiple' => true,
+            'label' => 'Rôles'
+            ])
             ->add('plainPassword', RepeatedType::class, [
                 'mapped' => false,
                 'attr' => ['autocomplete' => 'new-password'],
@@ -42,14 +51,16 @@ class RegistrationFormType extends AbstractType
                 'first_options'  => ['toggle' => true, 'label' => 'Registration.Password'],
                 'second_options' => ['toggle' => true, 'label' => 'Registration.RepeatPassword'],
             ])
-            ->add('customer',CustomerType::class)
-            ;
+            ->add('customer', EntityType::class, [
+                'class' => Customer::class,
+                'choice_label' => 'id',
+            ])
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'translation_domain'=>'form',
             'data_class' => User::class,
         ]);
     }

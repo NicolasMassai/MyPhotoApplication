@@ -1,0 +1,15 @@
+.tag-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.tag-list li {
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+    color: #333;
+    margin-bottom: 1px;
+}
+
+.btn-outline-success{
+    margin-left: 10px;
+}

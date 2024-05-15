@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Photo tag : {{ tag.name }}{% endblock %}
+
+{% block body %}
+<h2>{{ tag.name }}</h2>
+{% set photos = tag.photos %}
+{% include 'home/photo.html.twig' with photos %}
+{% endblock %}

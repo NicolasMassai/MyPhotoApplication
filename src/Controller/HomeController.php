@@ -3,15 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Photo;
-use App\Repository\TagRepository;
 use Symfony\UX\Turbo\TurboBundle;
 use App\Repository\PhotoRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class HomeController extends AbstractController
@@ -38,7 +34,6 @@ class HomeController extends AbstractController
         ]);
     }
     
-    #[IsGranted('ROLE_CUSTOMER')]
     #[Route('/photo/{slug}', name: 'app_display_photo')]
     public function displayPhoto(Photo $photo, PhotoRepository $photoRepository, string $slug): Response
     {
@@ -54,30 +49,7 @@ class HomeController extends AbstractController
 
         
 
-    #[Route("/photo/add/{id}", name: "add_to_cart")]
-    public function addToCart($id, SessionInterface $session, EntityManagerInterface $em,Request $request)
-    {
-        $product = $em->getRepository(Photo::class)->find($id);
-
-        if (!$product) {
-            throw $this->createNotFoundException('Produit non trouvé');
-        }        
-
-        $cart = $session->get('cart', []);
-        $cart[] = $product;
-        $session->set('cart', $cart);
-
-        if (TurboBundle::STREAM_FORMAT === $request->getPreferredFormat()) {
-            $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
-            return $this->render('home/cartNB.html.twig' ,
-            [
-                'cartNumber' => count($cart)
-            ]);
-
-        }
-
-        return $this->redirectToRoute('app_panier');
-    }
+    
 
     #[Route('/test', name: "add_test")]
     public function addTest(Request $request): Response

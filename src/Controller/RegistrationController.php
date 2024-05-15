@@ -14,6 +14,7 @@ use Symfony\Component\PasswordHasher\Exception\LogicException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
+
 class RegistrationController extends AbstractController
 {
     #[Route('/register', name: 'app_register')]

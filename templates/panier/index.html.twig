@@ -1,12 +1,60 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Panier{% endblock %}
+{% block title %}Votre panier{% endblock %}
 
 {% block body %}
-    <h1>Votre Panier</h1>
-    <ul>
-        {% for product in cart %}
-            <li>{{ product.title }} - {{ product.price }} €</li>
-        {% endfor %}
-    </ul>
+        <div class="row">
+            <div class="mt-50">
+                <h2>Votre panier</h2>
+            </div>
+            <div class="col-12 col-lg-8">
+                <turbo-frame id="product">
+                <table class="table table-responsive" data-controller="">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Nom</th>
+                            <th>Prix TTC</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for id, item in cart %}
+                        <tr>
+                            <td class="cart_product_img">
+                                <a href="{{ path('app_display_photo', {'slug' : item.slug })}}"><img src="{{ item.url }}" alt="{{ item.title }}" width="100"></a>
+                            </td>
+                            <td class="cart_product_desc">
+                                <h5><a href="{{ path('app_display_photo', {'slug' : item.slug })}}">{{ item.title }}</a></h5>
+                            </td>
+                          
+
+                            
+                           
+                            <td class="price">
+                                <span>{{ (item.price  )}}</span>
+                            </td>
+                           
+                           
+                        </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="4">Votre panier est vide !</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                </turbo-frame>
+            </div>
+<div class="col-12 col-lg-4">
+                <h3>Montant du panier</h3>
+                <turbo-frame id="total">
+                    <ul>
+                    </ul>
+                </turbo-frame>
+                <div class="cart-btn mt-100">
+                    <a href="{{ path('app_order') }}" class="btn btn-success w-100">Valider la commande</a>
+                </div>
+            </div>
+        </div>
 {% endblock %}
+
