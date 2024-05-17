@@ -43,15 +43,20 @@ class Photo
     #[ORM\ManyToMany(targetEntity: Tag::class, mappedBy: 'photo_id')]
     private Collection $tags;
 
-    #[ORM\Column(length: 255, unique: true)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $slug = null;
 
-    #[ORM\OneToOne(mappedBy: 'photo', cascade: ['persist', 'remove'])]
-    private ?OrderItem $orderItem = null;
+    /**
+     * @var Collection<int, OrderItem>
+     */
+    #[ORM\OneToMany(targetEntity: OrderItem::class, mappedBy: 'photo')]
+    private Collection $orderItems;
+
 
     public function __construct()
     {
         $this->tags = new ArrayCollection();
+        $this->orderItems = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -182,25 +187,37 @@ class Photo
         return $this;
     }
 
-    public function getOrderItem(): ?OrderItem
+    /**
+     * @return Collection<int, OrderItem>
+     */
+    public function getOrderItems(): Collection
     {
-        return $this->orderItem;
+        return $this->orderItems;
     }
 
-    public function setOrderItem(?OrderItem $orderItem): static
+    public function addOrderItem(OrderItem $orderItem): static
     {
-        // unset the owning side of the relation if necessary
-        if ($orderItem === null && $this->orderItem !== null) {
-            $this->orderItem->setPhoto(null);
-        }
-
-        // set the owning side of the relation if necessary
-        if ($orderItem !== null && $orderItem->getPhoto() !== $this) {
+        if (!$this->orderItems->contains($orderItem)) {
+            $this->orderItems->add($orderItem);
             $orderItem->setPhoto($this);
         }
 
-        $this->orderItem = $orderItem;
+        return $this;
+    }
+
+    public function removeOrderItem(OrderItem $orderItem): static
+    {
+        if ($this->orderItems->removeElement($orderItem)) {
+            // set the owning side to null (unless already changed)
+            if ($orderItem->getPhoto() === $this) {
+                $orderItem->setPhoto(null);
+            }
+        }
 
         return $this;
     }
+    public function __tostring(){
+        return $this->title;
+    }
+    
 }

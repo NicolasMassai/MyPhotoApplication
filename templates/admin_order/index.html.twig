@@ -1,0 +1,67 @@
+{# templates/admin_order/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des commandes{% endblock %}
+
+{% block body %}
+    <h1>Liste des commandes</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Statut</th>
+                <th>Détails</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+                <tr>
+                    <td>{{ order.id }}</td>
+                    <td>{{ order.statut }}</td>
+                    <td>
+                        <button onclick="toggleDetails({{ order.id }})">Afficher les détails</button>
+                    </td>
+                    <td>
+                        <a href="{{ path('app_admin_order_edit', {'id': order.id}) }}">edit</a>
+                    </td>
+                </tr>
+                <tr id="details-{{ order.id }}" style="display:none;">
+                    <td colspan="2">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Photo</th>
+                                    <th>Quantité</th>
+                                    <th>Prix</th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in order.orderItems %}
+                                    <tr>
+                                        <td>{{ item.photo }}</td>
+                                        <td>{{ item.quantity }}</td>
+                                        <td>{{ item.prix }} €</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <script>
+        function toggleDetails(orderId) {
+            var detailsRow = document.getElementById('details-' + orderId);
+            if (detailsRow.style.display === 'none') {
+                detailsRow.style.display = 'table-row';
+            } else {
+                detailsRow.style.display = 'none';
+            }
+        }
+    </script>
+{% endblock %}

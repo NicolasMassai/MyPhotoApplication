@@ -13,31 +13,43 @@ class OrderItem
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToOne(inversedBy: 'orderItem', cascade: ['persist', 'remove'])]
-    private ?Order $orders = null;
+    #[ORM\Column(nullable: true)]
+    private ?int $quantity = null;
 
-    #[ORM\OneToOne(inversedBy: 'orderItem', cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(inversedBy: 'orderItems')]
+    private ?Order $commande = null;
+
+    #[ORM\ManyToOne(inversedBy: 'orderItems')]
     private ?Photo $photo = null;
 
     #[ORM\Column]
-    private ?int $quantity = null;
+    private ?float $prix = null;
 
-    #[ORM\Column]
-    private ?float $price = null;
-    
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getOrders(): ?Order
+    public function getQuantity(): ?int
     {
-        return $this->orders;
+        return $this->quantity;
     }
 
-    public function setOrders(?Order $orders): static
+    public function setQuantity(?int $quantity): static
     {
-        $this->orders = $orders;
+        $this->quantity = $quantity;
+
+        return $this;
+    }
+
+    public function getCommande(): ?Order
+    {
+        return $this->commande;
+    }
+
+    public function setCommande(?Order $commande): static
+    {
+        $this->commande = $commande;
 
         return $this;
     }
@@ -53,29 +65,20 @@ class OrderItem
 
         return $this;
     }
-
-    public function getQuantity(): ?int
+    public function __toString(): string
     {
-        return $this->quantity;
+        return 'OrderItem ' . $this->id; // ou toute autre information pertinente
     }
 
-    public function setQuantity(int $quantity): static
+    public function getPrix(): ?float
     {
-        $this->quantity = $quantity;
+        return $this->prix;
+    }
+
+    public function setPrix(float $prix): static
+    {
+        $this->prix = $prix;
 
         return $this;
     }
-
-    public function getPrice(): ?float
-    {
-        return $this->price;
-    }
-
-    public function setPrice(float $price): static
-    {
-        $this->price = $price;
-
-        return $this;
-    }
-
 }

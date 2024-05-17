@@ -12,9 +12,11 @@
                 <table class="table table-responsive" data-controller="">
                     <thead>
                         <tr>
-                            <th></th>
+                            <th>Photo</th>
                             <th>Nom</th>
-                            <th>Prix TTC</th>
+                            <th>Quantité</th>
+                            <th>Prix</th>
+                            
                         </tr>
                     </thead>
                     <tbody>
@@ -26,12 +28,21 @@
                             <td class="cart_product_desc">
                                 <h5><a href="{{ path('app_display_photo', {'slug' : item.slug })}}">{{ item.title }}</a></h5>
                             </td>
+                               <td class="qty">
+                                <div class="qty-btn d-flex">
+                                    <div class="quantity">
+                                        <form action="{{ path('app_panier_update', {id: id}) }}" data-controller="qty" method="POST">
+                                            <input data-action="qty#submit" type="number" class="form-control" step="1" min="0" max="300" name="qty" value="{{ item.qty }}">
+                                        </form>
+                                    </div>
+                                </div>
+                            </td>
                           
 
                             
                            
                             <td class="price">
-                                <span>{{ (item.price  )}}</span>
+                                <span>{{ (item.price * item.qty )}} €</span>
                             </td>
                            
                            
@@ -49,10 +60,11 @@
                 <h3>Montant du panier</h3>
                 <turbo-frame id="total">
                     <ul>
+                        <li><span>Total :</span> <span id="total">{{ total }} €</span></li>
                     </ul>
                 </turbo-frame>
                 <div class="cart-btn mt-100">
-                    <a href="{{ path('app_order') }}" class="btn btn-success w-100">Valider la commande</a>
+                    <a href="{{ path('app_commande') }}" class="btn btn-success w-100">Valider la commande</a>
                 </div>
             </div>
         </div>

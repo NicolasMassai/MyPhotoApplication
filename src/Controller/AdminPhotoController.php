@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Photo;
 use App\Form\PhotoType;
 use App\Repository\PhotoRepository;
+use App\Service\Upload;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,13 +24,19 @@ class AdminPhotoController extends AbstractController
     }
 
     #[Route('/new', name: 'app_admin_photo_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager,Upload $upload): Response
     {
         $photo = new Photo();
         $form = $this->createForm(PhotoType::class, $photo);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+        $photoURL = $form->get('upload')->getData();
+        if ($photoURL) {
+            $photoFileName = $upload->upload($photoURL);
+            $photo->setUrl($photoFileName);
+        }
             $entityManager->persist($photo);
             $entityManager->flush();
 

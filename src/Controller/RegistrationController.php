@@ -26,16 +26,9 @@ class RegistrationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $plainPassword = $form->get('plainPassword')->getData();
-            $confirmPassword = $form->get('passwordConfirm')->getData();
-    
-            // Vérifier si les mots de passe correspondent
-            if ($plainPassword !== $confirmPassword) {
-                throw new LogicException('Les mots de passe ne correspondent pas.');
-            }
-            
+
             $user->setPassword(
-                    $userPasswordHasher->hashPassword(
+                $userPasswordHasher->hashPassword(
                     $user,
                     $form->get('plainPassword')->getData()
                 )

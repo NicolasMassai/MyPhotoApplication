@@ -33,7 +33,7 @@
 			</li>
 		<form class="d-flex" role="search">
     <div class="position-relative">
-        <input id="searchInput" class="form-control me-2" type="search" placeholder="..." aria-label="Search">
+            {{ render(path('app_search_tag')) }}
         <div id="searchResults" class="position-absolute top-100 start-0 translate-middle-y bg-white border border-1 border-secondary rounded-3" style="display: none;">
             {{ render(controller('App\\Controller\\PanierController::requete')) }}
         </div>

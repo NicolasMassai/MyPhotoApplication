@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\Tag;
 use App\Entity\Photo;
 use App\Form\TagType;
-use Symfony\Component\BrowserKit\Request;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -44,4 +44,6 @@ class TagController extends AbstractController
             'form' => $form,
         ]);
     }
+
+    
 }

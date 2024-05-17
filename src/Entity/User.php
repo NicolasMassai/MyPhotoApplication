@@ -38,6 +38,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     private $passwordConfirm;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $token = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $tokenExpireAt = null;
+
 
     public function getId(): ?int
     {
@@ -138,6 +144,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         $this->customer = $customer;
+
+        return $this;
+    }
+
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    public function setToken(?string $token): static
+    {
+        $this->token = $token;
+
+        return $this;
+    }
+
+    public function getTokenExpireAt(): ?\DateTimeImmutable
+    {
+        return $this->tokenExpireAt;
+    }
+
+    public function setTokenExpireAt(?\DateTimeImmutable $tokenExpireAt): static
+    {
+        $this->tokenExpireAt = $tokenExpireAt;
 
         return $this;
     }

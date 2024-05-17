@@ -38,9 +38,6 @@ class HomeController extends AbstractController
     public function displayPhoto(Photo $photo, PhotoRepository $photoRepository, string $slug): Response
     {
 
-        $photo = $photoRepository->findOneBySlug($slug);
-
-//        $photo = $photoRepository->find($id);
 
             return $this->render('home/detail.html.twig', [
             'photo' => $photo,

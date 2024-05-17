@@ -11,6 +11,7 @@ use Symfony\Component\Form\ChoiceList\ChoiceList;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
@@ -24,6 +25,7 @@ class UserType extends AbstractType
             ->add('roles', ChoiceType::class,[
             'choices'=>[
                 'Client'=> 'ROLE_CUSTOMER',
+                'Api' => 'ROLE_API',
                 'Admin' => 'ROLE_ADMIN',
             ],
             'expanded' => true,
@@ -51,6 +53,8 @@ class UserType extends AbstractType
                 'first_options'  => ['toggle' => true, 'label' => 'Registration.Password'],
                 'second_options' => ['toggle' => true, 'label' => 'Registration.RepeatPassword'],
             ])
+            ->add('token')
+            ->add('tokenExpireAt',DateType::class)
             ->add('customer', EntityType::class, [
                 'class' => Customer::class,
                 'choice_label' => 'id',

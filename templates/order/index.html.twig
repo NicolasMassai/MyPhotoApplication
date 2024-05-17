@@ -1,12 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Panier{% endblock %}
+{% block title %}Validate Order{% endblock %}
 
 {% block body %}
-    <h1>Votre Commande</h1>
-    <ul>
-        {% for product in cart %}
-            <li>{{ product.title }} - {{ product.price }} €</li>
-        {% endfor %}
-    </ul>
+    <h1>Validate Order</h1>
+
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button type="submit">Validate Order</button>
+    {{ form_end(form) }}
 {% endblock %}

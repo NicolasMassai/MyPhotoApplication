@@ -16,7 +16,7 @@ class AppFixtures extends Fixture
 
         $tags=[];
 
-        for($i=0; $i<30; $i++){
+        for($i=0; $i<90; $i++){
             $tag = new Tag();
 
             $tag->setName($faker->word());
@@ -27,7 +27,7 @@ class AppFixtures extends Fixture
             
         }
 
-            for($j=0; $j<30; $j++){
+            for($j=0; $j<60; $j++){
                 $photo = new Photo();
 
                 $photo->setTitle($faker->sentence(3))
@@ -36,9 +36,14 @@ class AppFixtures extends Fixture
                 ->setUrl($faker->imageUrl(640, 480, 'animals', true))
                 ->setMetaInfo([])
                 ->setSlug($faker->unique()->word);
-                for ($k = 0; $k < rand(1, 4); $k++) {
-                    $photo->addTag($tags[array_rand($tags)]);
+               
+                $nbTags = random_int(1,5);
+                for($k=0;$k < $nbTags;$k++) {
+                    shuffle($tags);
+                    $photo->addTag($tags[0]);
                 }
+                
+
                 $createdAt = $faker->dateTimeBetween('-1 week', 'now');
                 $photo->setCreatedAt(\DateTimeImmutable::createFromMutable($createdAt));
 

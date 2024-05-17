@@ -138,4 +138,7 @@ class Customer
 
         return $this;
     }
+    public function __tostring(){
+        return $this->city;
+    }
 }

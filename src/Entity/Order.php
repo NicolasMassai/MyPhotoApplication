@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\OrderRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
@@ -14,14 +16,27 @@ class Order
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'orders')]
     private ?Customer $customer = null;
 
-    #[ORM\OneToOne(mappedBy: 'orders', cascade: ['persist', 'remove'])]
-    private ?OrderItem $orderItem = null;
+    /**
+     * @var Collection<int, OrderItem>
+     */
+    #[ORM\OneToMany(targetEntity: OrderItem::class, mappedBy: 'commande',cascade: ['persist', 'remove'])]
+    private Collection $orderItems;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    public ?string $statut = null;
+
+    public function __construct()
+    {
+        $this->orderItems = new ArrayCollection();
+    }
+
+
 
     public function getId(): ?int
     {
@@ -52,25 +67,47 @@ class Order
         return $this;
     }
 
-    public function getOrderItem(): ?OrderItem
+    /**
+     * @return Collection<int, OrderItem>
+     */
+    public function getOrderItems(): Collection
     {
-        return $this->orderItem;
+        return $this->orderItems;
     }
 
-    public function setOrderItem(?OrderItem $orderItem): static
+    public function addOrderItem(OrderItem $orderItem): static
     {
-        // unset the owning side of the relation if necessary
-        if ($orderItem === null && $this->orderItem !== null) {
-            $this->orderItem->setOrders(null);
+        if (!$this->orderItems->contains($orderItem)) {
+            $this->orderItems->add($orderItem);
+            $orderItem->setCommande($this);
         }
-
-        // set the owning side of the relation if necessary
-        if ($orderItem !== null && $orderItem->getOrders() !== $this) {
-            $orderItem->setOrders($this);
-        }
-
-        $this->orderItem = $orderItem;
 
         return $this;
     }
+
+    public function removeOrderItem(OrderItem $orderItem): static
+    {
+        if ($this->orderItems->removeElement($orderItem)) {
+            // set the owning side to null (unless already changed)
+            if ($orderItem->getCommande() === $this) {
+                $orderItem->setCommande(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->statut;
+    }
+
+    public function setStatus(string $statut): static
+    {
+        $this->statut = $statut;
+
+        return $this;
+    }
+
+   
 }
